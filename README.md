@@ -48,6 +48,9 @@ npm run dev                                                   # simulator on htt
 npm run pack                                                  # writes my-theme-0.1.0.bst
 ```
 
+Recent versions of npm warn that they skipped esbuild's install script. That is harmless: the build
+does not need it.
+
 `npm run dev` opens the panel's screen at its real size, with a simulated car behind it. Each save
 rebuilds the theme and reloads it. **Back** and **Next** (or the arrow keys) stand in for the
 swipes, and the **drag** slider holds the panel part-way out. Every command your theme sends is
