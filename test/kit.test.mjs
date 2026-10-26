@@ -71,14 +71,15 @@ test('the simulated car refuses everything until control is enabled', async () =
   assert.deepEqual(car.command('SAT_PRESSED'), { ok: false, reason: 'unavailable' });
 });
 
-test('the simulated car hides the fan speed in AUTO and locks a setpoint at its limit', async () => {
+test('the simulated car reports no temperature, fan speed or volume', async () => {
   const { SimCar } = await load('../src/sim/car.ts');
   const car = new SimCar();
   car.command('ENABLE_CONTROL_PRESSED');
-  assert.equal(car.state.climate.fan, null);
+  for (const key of ['driver', 'passenger', 'fan']) assert.ok(!(key in car.state.climate), key);
+  assert.deepEqual(Object.keys(car.state.radio), ['muted']);
   car.command('FAN_UP');
-  assert.equal(car.state.climate.auto, false);
-  assert.equal(typeof car.state.climate.fan, 'number');
-  for (let i = 0; i < 40; i++) car.command('LH_TEMP_UP');
-  assert.deepEqual(car.state.climate.driver, { temp: 90, known: true });
+  assert.equal(car.state.climate.auto, false, 'the fan still takes the system out of AUTO');
+  car.command('MUTE_PRESSED');
+  car.command('VOLUME_UP');
+  assert.equal(car.state.radio.muted, false, 'turning the volume unmutes');
 });

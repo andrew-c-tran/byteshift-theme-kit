@@ -14,7 +14,10 @@
  * ever gets the controls a passenger could reach on the factory panel.
  */
 
-/** One detent per command. */
+/**
+ * One detent per command. The car reports no level for any of these (temperature, fan speed,
+ * volume), so they are up and down controls with no value to show.
+ */
 export const KNOBS = [
   /** Driver's (left-hand) temperature. */
   'LH_TEMP_UP', 'LH_TEMP_DOWN',

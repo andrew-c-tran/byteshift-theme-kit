@@ -1,25 +1,25 @@
 /**
- * The first page: both zones large, where the air goes, the fan, and every climate key.
+ * The first page: both temperature zones, where the air goes, the fan, and every climate key.
+ *
+ * The car does not report the temperatures or the fan speed, so those are up and down buttons with
+ * no value between them. What it does report - which keys are on, and where the air goes - lights.
  */
 import { useClimate, type Vent } from '@byteshift/theme';
 import { Icon } from './icons';
-import { Header, Key, Step, Temp } from './parts';
+import { Header, Key, Step } from './parts';
 
 const VENT_WORD: Record<Exclude<Vent, null>, string> = {
   'face': 'FACE', 'face-feet': 'FACE + FEET', 'feet': 'FEET', 'feet-screen': 'FEET + SCREEN',
 };
 
-function Zone({ side, label, temp, known, live }: {
-  side: 'LH' | 'RH'; label: string; temp: number; known: boolean; live: boolean;
-}) {
+function Zone({ side, label, live }: { side: 'LH' | 'RH'; label: string; live: boolean }) {
   return (
     <div className={`zone${live ? '' : ' idle'}`}>
-      <Step knob={`${side}_TEMP_UP`} label={`${label} warmer`} className="warm">+</Step>
-      <div className="big">
-        <div className="t"><Temp value={temp} known={known} /></div>
-        <div className="l">{label}</div>
+      <div className="zonelabel">{label}</div>
+      <div className="pair">
+        <Step knob={`${side}_TEMP_DOWN`} label={`${label} cooler`} className="cool">–</Step>
+        <Step knob={`${side}_TEMP_UP`} label={`${label} warmer`} className="warm">+</Step>
       </div>
-      <Step knob={`${side}_TEMP_DOWN`} label={`${label} cooler`} className="cool">–</Step>
     </div>
   );
 }
@@ -27,37 +27,24 @@ function Zone({ side, label, temp, known, live }: {
 export function ClimatePage() {
   const c = useClimate();
   if (!c) return <div className="page" />;
-  const guesses = [
-    !c.driver.known && (c.dual ? 'driver' : 'cabin'),
-    c.dual && !c.passenger.known && 'passenger',
-  ].filter(Boolean);
 
   return (
     <div className="page">
       <Header title="CLIMATE" hint="SWIPE → RADIO   ·   ← CLOSE" />
 
       <div className="zones">
-        <Zone side="LH" label={c.dual ? 'DRIVER' : 'CABIN'} temp={c.driver.temp} known={c.driver.known} live />
+        <Zone side="LH" label={c.dual ? 'DRIVER' : 'TEMPERATURE'} live />
         <div className="mid">
           <span>AIRFLOW</span>
-          <b>{c.frontDefrost ? 'SCREEN' : c.vent ? VENT_WORD[c.vent] : '—'}</b>
-          <span className="fanlabel"><Icon name="fan" size={18} /> FAN</span>
-          {/* Never a number the car did not give: in AUTO it does not say. */}
-          <b>{c.off ? 'OFF' : c.fan === null ? 'AUTO' : c.fan}</b>
+          <b>{c.off ? 'OFF' : c.frontDefrost ? 'SCREEN' : c.vent ? VENT_WORD[c.vent] : '—'}</b>
         </div>
-        <Zone
-          side="RH" label={c.dual ? 'PASSENGER' : 'LINKED'}
-          temp={c.passenger.temp} known={c.passenger.known} live={c.dual}
-        />
+        {/* The passenger side only answers while DUAL is on. */}
+        <Zone side="RH" label="PASSENGER" live={c.dual} />
       </div>
 
       <div className="fan">
         <Step knob="FAN_DOWN" label="Fan down">–</Step>
-        <div className="pips" aria-hidden>
-          {[1, 2, 3, 4, 5, 6, 7].map((n) => (
-            <i key={n} className={c.fan !== null && n <= c.fan ? 'lit' : c.fan === null && !c.off ? 'auto' : ''} />
-          ))}
-        </div>
+        <div className="fanlabel"><Icon name="fan" size={22} /> FAN</div>
         <Step knob="FAN_UP" label="Fan up">+</Step>
       </div>
 
@@ -74,13 +61,6 @@ export function ClimatePage() {
         <Key button="REAR_DEFROST" on={c.rearDefrost} icon="rear" label="REAR" />
         <Key button="CLIMATE_OFF" on={c.off} icon="off" label="OFF" />
       </div>
-
-      {guesses.length > 0 && (
-        <p className="notice">
-          The {guesses.join(' and ')} temperature is an estimate: the car does not report it. Run it
-          to its lowest or highest once and it locks.
-        </p>
-      )}
     </div>
   );
 }

@@ -1,10 +1,13 @@
 /**
  * The always-visible column: the driver's temperature, the four climate keys a driver reaches for
  * most, and volume. Everything else is a swipe away.
+ *
+ * Temperature and volume are up and down only: the car does not report either, so there is no
+ * value to show between the buttons, just what they control.
  */
 import { useClimate, useControl, useRadio } from '@byteshift/theme';
 import { Icon } from './icons';
-import { Key, Status, Step, Temp } from './parts';
+import { Key, Status, Step } from './parts';
 
 export function Strip() {
   const c = useClimate();
@@ -19,10 +22,7 @@ export function Strip() {
 
       <div className="stack">
         <Step knob="LH_TEMP_UP" label="Warmer" className="warm">+</Step>
-        <div className="readout">
-          <Temp value={c.driver.temp} known={c.driver.known} />
-          <small>{c.dual ? 'DRIVER' : 'CABIN'}</small>
-        </div>
+        <div className="what">{c.dual ? 'DRIVER' : 'TEMP'}</div>
         <Step knob="LH_TEMP_DOWN" label="Cooler" className="cool">–</Step>
       </div>
 

@@ -26,7 +26,7 @@ function ClimatePage() {
   return (
     <div className="page">
       <button onClick={() => sendCommand('LH_TEMP_UP')}>+</button>
-      <h1>{climate.driver.temp}°</h1>
+      <span>TEMP</span>
       <button onClick={() => sendCommand('LH_TEMP_DOWN')}>–</button>
       <PressButton button="AC" className={climate.ac ? 'on' : ''}>A/C</PressButton>
     </div>
@@ -67,12 +67,12 @@ panel:
   `usePress()`, which send the pair as the finger goes down and comes up.
 
 Draw what the car reports, not what was tapped. A button lights because `climate.ac` became true,
-not because it was pressed. The car is honest about what it doesn't know, and a theme should be too:
+not because it was pressed.
 
-- A temperature the car is still estimating has `known: false`.
-- `fan` is `null` while AUTO is choosing the speed.
-- Some buttons have no command yet. They are listed in `control.unavailable`, and `<PressButton>`
-  disables them for you.
+The car reports which functions are on, but never a level. **There is no temperature, fan speed
+or volume to show,** so those controls are up and down buttons with nothing between them. Some
+buttons have no command yet. They are listed in `control.unavailable`, and `<PressButton>`
+disables them for you.
 
 Nothing outside climate and audio is reachable. The drive-mode switches and routines are not part
 of the kit.

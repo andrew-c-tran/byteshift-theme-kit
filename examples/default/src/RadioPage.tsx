@@ -1,5 +1,7 @@
 /**
- * The second page: volume and tuning as knobs, the six presets, and the sources.
+ * The second page: volume and tuning, the six presets, and the sources.
+ *
+ * The car does not report the volume, so it is up and down with no number; mute it does report.
  */
 import { PressButton, useAvailable, useRadio, type Button } from '@byteshift/theme';
 import { Icon } from './icons';
@@ -38,11 +40,11 @@ export function RadioPage() {
         <div className="dial">
           <div className="tiny">
             <span>VOLUME</span>
-            <span className={r.muted ? 'amber' : ''}>{r.muted ? 'MUTED' : r.volumeKnown ? '' : 'ESTIMATE'}</span>
+            {r.muted && <span className="amber">MUTED</span>}
           </div>
           <div className="row">
             <Step knob="VOLUME_DOWN" label="Volume down">–</Step>
-            <span className="val">{r.volume}{!r.volumeKnown && <span className="q">?</span>}</span>
+            <span className="word"><Icon name={r.muted ? 'muted' : 'speaker'} size={30} /></span>
             <Step knob="VOLUME_UP" label="Volume up">+</Step>
           </div>
           <Key button="MUTE" on={r.muted} icon={r.muted ? 'muted' : 'speaker'} label={r.muted ? 'UNMUTE' : 'MUTE'} className="wide" />

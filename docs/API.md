@@ -27,32 +27,26 @@ All hooks return `null` until the panel has heard from the car, so handle that f
 
 ### `useClimate(): ClimateState | null`
 
-| Field          | Type                                                              | Notes                                                                       |
-| -------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `driver`       | `{ temp: number; known: boolean }`                                | In the units the car displays. `known: false` means the car is estimating.  |
-| `passenger`    | same                                                              | Repeats `driver` while `dual` is off.                                       |
-| `dual`         | `boolean`                                                         |                                                                             |
-| `auto`         | `boolean`                                                         |                                                                             |
-| `ac`           | `boolean`                                                         |                                                                             |
-| `off`          | `boolean`                                                         | The whole system is off.                                                    |
-| `fan`          | `number \| null`                                                  | 1 to 7, 0 when off, `null` while AUTO is choosing the speed.                |
-| `intake`       | `'fresh' \| 'recirc'`                                             |                                                                             |
-| `vent`         | `'face' \| 'face-feet' \| 'feet' \| 'feet-screen' \| null`        | `null` when nothing is selected (front defrost clears it).                  |
-| `frontDefrost` | `boolean`                                                         |                                                                             |
-| `rearDefrost`  | `boolean`                                                         |                                                                             |
+The car reports which climate functions are on. **It never reports the temperature setpoints or
+the fan speed,** and the panel cannot work them out, so there is no value for a theme to show. Draw
+those controls as up and down buttons only.
 
-**Why setpoints are estimated.** Nothing on the car's bus reports a temperature setpoint. The
-controller counts knob detents from a starting guess. Once a zone has been turned to its lowest or
-highest setting, the count is exact and `known` becomes true. Draw an estimate differently from a
-known value; the default theme adds a small `?`.
+| Field          | Type                                                              | Notes                                                       |
+| -------------- | ----------------------------------------------------------------- | ----------------------------------------------------------- |
+| `dual`         | `boolean`                                                         | The passenger side is set separately.                      |
+| `auto`         | `boolean`                                                         |                                                             |
+| `ac`           | `boolean`                                                         |                                                             |
+| `off`          | `boolean`                                                         | The whole system is off.                                    |
+| `intake`       | `'fresh' \| 'recirc'`                                             |                                                             |
+| `vent`         | `'face' \| 'face-feet' \| 'feet' \| 'feet-screen' \| null`        | `null` when nothing is selected (front defrost clears it). |
+| `frontDefrost` | `boolean`                                                         |                                                             |
+| `rearDefrost`  | `boolean`                                                         |                                                             |
 
 ### `useRadio(): RadioState | null`
 
-| Field         | Type      | Notes                                    |
-| ------------- | --------- | ---------------------------------------- |
-| `volume`      | `number`  |                                          |
-| `volumeKnown` | `boolean` | Estimated, like a setpoint, until it has been turned to a limit. |
-| `muted`       | `boolean` |                                          |
+| Field   | Type      | Notes                                                                       |
+| ------- | --------- | --------------------------------------------------------------------------- |
+| `muted` | `boolean` | The only audio state the car reports. **There is no volume level to show.** |
 
 ### `useControl(): ControlState | null`
 
@@ -99,6 +93,8 @@ type CommandResult =
 ```
 
 ### Knobs: one detent per command
+
+None of these report a level back, so draw them as up and down buttons with no value between.
 
 | Command                           | Control                                      |
 | --------------------------------- | -------------------------------------------- |

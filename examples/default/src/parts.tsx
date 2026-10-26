@@ -62,8 +62,3 @@ export function Header({ title, hint }: { title: string; hint: string }) {
     </header>
   );
 }
-
-/** A setpoint, with a small `?` while the car is still guessing it. */
-export function Temp({ value, known }: { value: number; known: boolean }) {
-  return <>{value}°{!known && <span className="q">?</span>}</>;
-}

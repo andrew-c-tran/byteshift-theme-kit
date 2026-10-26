@@ -1,35 +1,22 @@
 import type { ComponentType } from 'react';
 import type { Button, Command } from './commands';
 
-/**
- * A temperature setpoint, in the units the car displays.
- *
- * `known` matters. Nothing on the car's bus reports a setpoint, so the controller counts knob
- * detents from a guess until the zone is run to its limit once, at which point it locks. A theme
- * should draw a guessed value differently from a known one (the default theme adds a small `?`).
- */
-export interface Setpoint {
-  temp: number;
-  known: boolean;
-}
-
 /** Where the air is going, or null when nothing is selected (front defrost clears it). */
 export type Vent = 'face' | 'face-feet' | 'feet' | 'feet-screen' | null;
 
+/**
+ * What the car reports about climate and audio: which functions are on, never a level.
+ *
+ * The car does not report the temperature setpoints, the fan speed or the volume, and the panel
+ * cannot work them out. Those controls are up and down only (see KNOBS), and a theme has no number
+ * to show for them.
+ */
 export interface ClimateState {
-  driver: Setpoint;
-  /** While DUAL is off the passenger side follows the driver; this then repeats `driver`. */
-  passenger: Setpoint;
   dual: boolean;
   auto: boolean;
   ac: boolean;
   /** The whole system is off. */
   off: boolean;
-  /**
-   * Blower speed, 1-7, or 0 with the system off. Null while AUTO is running the blower: the car
-   * does not say what speed it chose, and a theme must not invent one.
-   */
-  fan: number | null;
   intake: 'fresh' | 'recirc';
   vent: Vent;
   frontDefrost: boolean;
@@ -37,9 +24,6 @@ export interface ClimateState {
 }
 
 export interface RadioState {
-  volume: number;
-  /** Like a setpoint, the volume is counted from a guess until it has been run to a limit. */
-  volumeKnown: boolean;
   muted: boolean;
 }
 
