@@ -1,0 +1,15 @@
+{
+  "name": "bst-theme-default",
+  "private": true,
+  "scripts": {
+    "dev": "bst dev",
+    "build": "bst build",
+    "pack": "bst pack",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@byteshift/theme": "file:../..",
+    "@types/react": "~19.2.2",
+    "typescript": "~6.0.3"
+  }
+}

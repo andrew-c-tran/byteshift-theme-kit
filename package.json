@@ -1,0 +1,37 @@
+{
+  "name": "@byteshift/theme",
+  "version": "0.1.0",
+  "description": "Build themes for the ByteShift panel: React components for the strip, the climate page and the radio page, packaged as .bst",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "bst": "cli/bst.mjs" },
+  "exports": {
+    ".": { "types": "./src/index.ts", "default": "./src/index.ts" },
+    "./host": "./src/host/index.ts",
+    "./protocol": "./src/protocol.ts"
+  },
+  "types": "./src/index.ts",
+  "files": ["cli", "src", "docs", "examples/default/bst.json", "examples/default/package.json", "examples/default/tsconfig.json", "examples/default/src", "examples/default/assets"],
+  "scripts": {
+    "typecheck": "tsc --noEmit && tsc --noEmit -p examples/default",
+    "test": "node --test test/*.test.mjs",
+    "example": "node cli/bst.mjs dev examples/default"
+  },
+  "dependencies": {
+    "esbuild": "^0.28.2",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "@types/react-dom": "~19.2.0",
+    "typescript": "~6.0.3"
+  },
+  "peerDependencies": {
+    "@types/react": "^19.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": { "optional": true }
+  },
+  "engines": { "node": ">=20" }
+}

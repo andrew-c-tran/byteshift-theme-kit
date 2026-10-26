@@ -1,0 +1,4 @@
+node_modules/
+dist/
+*.bst
+examples/default/package-lock.json

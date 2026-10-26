@@ -1,0 +1,8 @@
+{
+  "name": "ByteShift",
+  "author": "ByteShift Labs",
+  "version": "1.0.0",
+  "description": "The panel's own look: dark, condensed type, amber for what is on.",
+  "entry": "src/index.tsx",
+  "assets": "assets"
+}
