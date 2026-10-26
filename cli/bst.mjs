@@ -181,7 +181,9 @@ function init(dir) {
   const from = join(KIT, 'examples', 'default');
   cpSync(from, dir, {
     recursive: true,
-    filter: (src) => !/[\\/](dist|node_modules)([\\/]|$)/.test(src) && extname(src) !== '.bst' && basename(src) !== 'package-lock.json',
+    // Judged relative to the example: installed from GitHub, the kit itself sits in node_modules.
+    filter: (src) => !/(^|[\\/])(dist|node_modules)([\\/]|$)/.test(relative(from, src))
+      && extname(src) !== '.bst' && basename(src) !== 'package-lock.json',
   });
   const p = JSON.parse(readFileSync(join(dir, 'bst.json'), 'utf8'));
   p.name = 'My Theme';
